@@ -1,0 +1,26 @@
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.iml
+*.log
+*.orig
+*.rej
+*.swo
+*.swp
+*.vi
+*.zip
+*~
+
+# OS or Editor folders
+._*
+.bundle
+.cache
+.DS_Store
+.idea
+.project
+.sass-cache
+.settings
+.tmproj
+.vagrant
+*.esproj
+Thumbs.db
