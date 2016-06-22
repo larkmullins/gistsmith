@@ -2,13 +2,23 @@
 <html lang="en">
 <head>
   <title></title>
+  <style type="text/css">
+  .gist {
+    margin-bottom: 24px;
+  }
+  </style>
 </head>
 <body>
+  <div id="gists"></div>
 </body>
 <script src="../src/gistsmith.js" type="text/javascript"></script>
 <script type="text/javascript">
   gs = new Gistsmith({
-    username: 'larkmullins'
+    username: 'larkmullins',
+    templates: {
+      listing: ['date', 'title', 'preview'],
+      posting: ['date', 'title', 'introduction']
+    }
   });
 </script>
 </html>
