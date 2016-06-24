@@ -198,14 +198,103 @@
         if (mk[1].match(/^\n$/)) {
           continue;
         }
-        blocks.push(mk);
+
+        // trim line breaks at front or back
+        var text = mk[1].replace(/^\n+/, '').replace(/\n+$/, '');
+
+        // block to be rendered
+        var block = {};
+        var result = '';
+
+        // <h1> tag
+        if(result = /^\#{1}\s+(.*)\s?\#{0,1}/.exec(text)) {
+          block.type = 'header';
+          block.tag = 'h1';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <h2> tag
+        if(result = /^\#{2}\s+(.*)\s?\#{0,2}/.exec(text)) {
+          block.type = 'header';
+          block.tag = 'h2';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <h3> tag
+        if(result = /^\#{3}\s+(.*)\s?\#{0,3}/.exec(text)) {
+          block.type = 'header';
+          block.tag = 'h3';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <h4> tag
+        if(result = /^\#{4}\s+(.*)\s?\#{0,4}/.exec(text)) {
+          block.type = 'header';
+          block.tag = 'h4';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <h5> tag
+        if(result = /^\#{5}\s+(.*)\s?\#{0,5}/.exec(text)) {
+          block.type = 'header';
+          block.tag = 'h5';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <h6> tag
+        if(result = /^\#{6}\s+(.*)\s?\#{0,6}/.exec(text)) {
+          block.type = 'header';
+          block.tag = 'h6';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <ol> tag
+        if(result = /^\-{1}\s+(.*)\s?/.exec(text)) {
+          block.tag = 'ol';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
+
+        // <p> tag
+        if(result = /^([\w\s.\?\-\_]*)$/gm.exec(text)) {
+          block.type = 'paragrah';
+          block.tag = 'p';
+          block.text = result[1];
+          blocks.push(block);
+          continue;
+        }
       }
+
+      //console.log(blocks);
 
       return blocks;
     },
     render: function(blocks) {
+      var element;
       for(i in blocks) {
-        console.log(blocks[i]);
+        if(blocks[i].tag == 'ol') {
+          if(!element.outerHTML.match(/\<ol\>/)) {
+            console.log('hello');
+          }
+        } else {
+          element = document.createElement(blocks[i].tag);
+        }
+
+        element.innerHTML = blocks[i].text;
+        document.getElementById('markdown').appendChild(element);
       }
     }
   };
