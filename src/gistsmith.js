@@ -31,6 +31,20 @@ var Gistsmith = {
         throw new GSException("No Github username was provided");
       }
 
+      if(typeof options.element === "undefined") {
+        options.element = "gists";
+      }
+
+      if(typeof options.templates === "undefined") {
+        options.templates = {};
+        options.templates.list = ['title', 'date', 'excerpt'];
+        options.templates.post = ['title', 'date', 'introduction'];
+      } else if(typeof options.templates.list === "undefined") {
+        options.templates.list = ['title', 'date', 'excerpt'];
+      } else if(typeof options.templates.post === "undefined") {
+        options.templates.post = ['title', 'date', 'introduction'];
+      }
+
       return options;
     }
   },
@@ -79,8 +93,83 @@ var Gistsmith = {
     return gist;
   },
   views: {
-    list: function(gists) {
-      console.log('views list');
+    createList: function(gist, element, template) {
+      var GS = Gistsmith.instance();
+
+      // create element variables
+      var container =
+          title =
+          date =
+          excerpt = null;
+
+      // container element, holds all other elements
+      container = GS.views.createElement('div', null, {'class': 'gist'});
+      title     = GS.views.createTitle(gist.title, gist.slug);
+      date      = GS.views.createDate(gist.date);
+
+      if(typeof gist.excerpt !== "undefined") {
+        excerpt = GS.views.createExcerpt(gist.excerpt);
+      }
+
+      // use list template to attach created elements
+      for(i in template) {
+        if(typeof window[template[i]] === "undefined") {
+          throw new GSException("List template option: " + template[i] + " not allowed");
+        }
+
+        if(window[template[i]] !== null) {
+          GS.views.attachElement(container, window[template[i]]);
+        }
+      }
+
+      element = document.getElementById(element);
+      element.appendChild(container);
+    },
+    createTitle: function(title, slug) {
+      var GS = Gistsmith.instance();
+
+      container = GS.views.createElement('div', null, {'class': 'gist-title'});
+      link      = GS.views.createElement('a', title, {'href': slug});
+
+      GS.views.attachElement(container, link);
+
+      return container;
+    },
+    createDate: function(date) {
+      var GS = Gistsmith.instance();
+
+      container = GS.views.createElement('div', null, {'class': 'gist-date'});
+      date      = GS.views.createElement('span', date, {});
+
+      GS.views.attachElement(container, date);
+
+      return container;
+    },
+    createExcerpt: function(excerpt) {
+      var GS = Gistsmith.instance();
+
+      container = GS.views.createElement('div', null, {'class': 'gist-excerpt'});
+      excerpt   = GS.views.createElement('p', excerpt, {});
+
+      GS.views.attachElement(container, excerpt);
+
+      return container;
+    },
+    createElement: function(el, html, attr) {
+      var e = document.createElement(el);
+      for(i in attr) {
+        e.setAttribute(i, attr[i]);
+      }
+
+      // add inner html
+      if(html !== null) {
+        e.innerHTML = html;
+      }
+
+      return e;
+    },
+    attachElement: function(parent, child) {
+      parent.appendChild(child);
     }
   },
   go: function(options) {
@@ -106,11 +195,9 @@ var Gistsmith = {
 
           gists.push(gist);
 
-          //GS.views.list(gist)
+          GS.views.createList(gist, options.element, options.templates.list);
         });
       }
-
-      console.log(gists);
     });
   }
 }
