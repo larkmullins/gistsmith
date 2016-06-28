@@ -11,15 +11,20 @@
 <body>
   <div id="gists"></div>
   <div id="markdown"></div>
+  <script src="../src/gistsmith.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    Gistsmith.go({
+      'username': 'larkmullins'
+    });
+    /*
+    gs = new Gistsmith({
+      username: 'larkmullins',
+      templates: {
+        listing: ['date', 'title', 'preview'],
+        posting: ['date', 'title', 'introduction']
+      }
+    });
+    */
+  </script>
 </body>
-<script src="../src/gistsmith.js" type="text/javascript"></script>
-<script type="text/javascript">
-  gs = new Gistsmith({
-    username: 'larkmullins',
-    templates: {
-      listing: ['date', 'title', 'preview'],
-      posting: ['date', 'title', 'introduction']
-    }
-  });
-</script>
 </html>
